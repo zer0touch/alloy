@@ -1,0 +1,121 @@
+name: Security Channel Release Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
+  workflow_dispatch:
+    inputs:
+      upstream_tag:
+        description: 'Specific upstream Grafana tag to patch (e.g. v1.16.1)'
+        required: false
+
+env:
+  ALLOY_IMAGE_PREFIX: ghcr.io/${{ github.repository }}/alloy-secure
+  ALLOY_BINARY_PREFIX: build/alloy-secure
+
+jobs:
+  check-and-patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - name: Checkout custom repo
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Fetch upstream and determine tag
+        id: fetch-upstream
+        run: |
+          git remote add upstream https://github.com/grafana/alloy.git
+          git fetch upstream --tags
+          if [ -n "${{ github.event.inputs.upstream_tag }}" ]; then
+            UPSTREAM_TAG="${{ github.event.inputs.upstream_tag }}"
+          else
+            # Get latest tag from upstream
+            UPSTREAM_TAG=$(git tag -l 'v*' | grep -v '-' | sort -V | tail -n1)
+          fi
+          echo "upstream_tag=$UPSTREAM_TAG" >> $GITHUB_OUTPUT
+          echo "new_version=${UPSTREAM_TAG}.1" >> $GITHUB_OUTPUT
+
+      - name: Create security branch
+        run: |
+          UPSTREAM_TAG="${{ steps.fetch-upstream.outputs.upstream_tag }}"
+          NEW_VERSION="${{ steps.fetch-upstream.outputs.new_version }}"
+          
+          # Check if tag already exists in our repo
+          if git ls-remote --tags origin | grep -q "refs/tags/$NEW_VERSION"; then
+            echo "Security version $NEW_VERSION already released. Exiting."
+            exit 0
+          fi
+
+          git checkout -b security-patch/$NEW_VERSION refs/tags/$UPSTREAM_TAG
+
+      - name: Run Auto-Patching (Go)
+        run: |
+          # Try to update vulnerable go packages automatically
+          go get -u all
+          go mod tidy
+        continue-on-error: true
+
+      - name: Run Gosec Scan
+        uses: securego/gosec@master
+        with:
+          args: -exclude=G104,G115 ./...
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          exit-code: 1
+          severity: 'CRITICAL,HIGH'
+
+      - name: Tag and Push Release
+        if: success()
+        run: |
+          NEW_VERSION="${{ steps.fetch-upstream.outputs.new_version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: auto-applied security patches for $NEW_VERSION" || true
+          git tag $NEW_VERSION
+          git push origin security-patch/$NEW_VERSION
+          git push origin $NEW_VERSION
+
+      - name: Build Binary
+        if: success()
+        run: |
+          make alloy BINARY_PREFIX=$ALLOY_BINARY_PREFIX
+          
+      - name: Upload Binary Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alloy-secure-binary
+          path: ${{ env.ALLOY_BINARY_PREFIX }}
+
+      - name: Log in to the Container registry
+        if: success()
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker Image
+        if: success()
+        run: |
+          NEW_VERSION="${{ steps.fetch-upstream.outputs.new_version }}"
+          make alloy-image IMAGE_PREFIX=${{ env.ALLOY_IMAGE_PREFIX }} VERSION=${NEW_VERSION}
+
+      - name: Push Docker Image
+        if: success()
+        run: |
+          NEW_VERSION="${{ steps.fetch-upstream.outputs.new_version }}"
+          docker push ${{ env.ALLOY_IMAGE_PREFIX }}:${NEW_VERSION}
