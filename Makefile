@@ -85,10 +85,12 @@
 
 include tools/make/*.mk
 
-ALLOY_IMAGE          		?= grafana/alloy:latest
-ALLOY_IMAGE_WINDOWS  		?= grafana/alloy:windowsservercore-ltsc2022
-ALLOY_BINARY         		?= build/alloy
-SERVICE_BINARY       		?= build/alloy-service
+IMAGE_PREFIX         		?= grafana/alloy
+BINARY_PREFIX        		?= build/alloy
+ALLOY_IMAGE          		?= $(IMAGE_PREFIX):latest
+ALLOY_IMAGE_WINDOWS  		?= $(IMAGE_PREFIX):windowsservercore-ltsc2022
+ALLOY_BINARY         		?= $(BINARY_PREFIX)
+SERVICE_BINARY       		?= $(BINARY_PREFIX)-service
 ALLOYLINT_BINARY     		?= build/alloylint
 BUILDER_USER         		?= $(shell whoami)
 BUILDER_HOST         		?= $(shell hostname)
