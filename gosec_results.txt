@@ -1,0 +1,1031 @@
+Results:
+
+Golang errors in file: [/home/reprah007/src/alloy/fallback_version.go]:
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+  > [line 1 : column 1] - package requires newer Go version go1.26 (application built with go1.25)
+
+
+
+[[97;41m/home/reprah007/src/alloy/internal/web/api/api.go:292[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    291: 			default:
+  > 292: 				if sampleProb < 1 && rand.Float64() > sampleProb {
+    293: 					return
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/util/jitter/jitter.go:95[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    94: 	t.mut.RLock()
+  > 95: 	jitter := rand.Int64N(2 * int64(t.j))
+    96: 	period := t.d - t.j + time.Duration(jitter)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/service/cluster/cluster.go:204[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    203: 		node:                node,
+  > 204: 		randGen:             rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), uint64(time.Now().UnixNano()))),
+    205: 		notifyClusterChange: make(chan struct{}, 1),
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/integration-tests/docker/configs/prom-gen/main.go:219[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    218: 	for range ticker.C {
+  > 219: 		newValue := rand.Float64() * 1000
+    220: 		summary.Observe(newValue)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/integration-tests/docker/configs/prom-gen/main.go:175[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    174: 	for range ticker.C {
+  > 175: 		newValue := rand.Float64() * 1000
+    176: 		histogram.Observe(newValue)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/integration-tests/docker/configs/prom-gen/main.go:121[0m] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    120: 	for range ticker.C {
+  > 121: 		newValue := rand.Float64() * 100
+    122: 		gauge.Set(newValue)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/static/integrations/elasticsearch_exporter/tls.go:17[0m] - G402 (CWE-295): TLS InsecureSkipVerify set to true. (Confidence: HIGH, Severity: HIGH)
+    16: 		// pem settings are irrelevant if we're skipping verification anyway
+  > 17: 		tlsConfig.InsecureSkipVerify = true //nolint:gosec
+    18: 	}
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/component/remote/s3/s3.go:156[0m] - G402 (CWE-295): TLS InsecureSkipVerify may be set to true. (Confidence: LOW, Severity: HIGH)
+    155: 					TLSClientConfig: &tls.Config{
+  > 156: 						InsecureSkipVerify: args.Options.DisableSSL, //nolint:gosec
+    157: 					},
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/service/http/http.go:12[0m] - G108 (CWE-200): Profiling endpoint is automatically exposed on /debug/pprof (Confidence: HIGH, Severity: HIGH)
+    11: 	"net/http"
+  > 12: 	_ "net/http/pprof" //nolint:gosec // Register pprof handlers
+    13: 	"os"
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/static/integrations/nvidiagpu_exporter/internal/exporter/fields.go:28-144[0m] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+    27: 	//nolint:gochecknoglobals,gosec
+  > 28: 	fallbackQFieldToRFieldMap = map[QField]RField{
+  > 29: 		"timestamp":                         "timestamp",
+  > 30: 		"driver_version":                    "driver_version",
+  > 31: 		"count":                             "count",
+  > 32: 		"name":                              "name",
+  > 33: 		"serial":                            "serial",
+  > 34: 		"uuid":                              "uuid",
+  > 35: 		"pci.bus_id":                        "pci.bus_id",
+  > 36: 		"pci.domain":                        "pci.domain",
+  > 37: 		"pci.bus":                           "pci.bus",
+  > 38: 		"pci.device":                        "pci.device",
+  > 39: 		"pci.device_id":                     "pci.device_id",
+  > 40: 		"pci.sub_device_id":                 "pci.sub_device_id",
+  > 41: 		"pcie.link.gen.current":             "pcie.link.gen.current",
+  > 42: 		"pcie.link.gen.max":                 "pcie.link.gen.max",
+  > 43: 		"pcie.link.width.current":           "pcie.link.width.current",
+  > 44: 		"pcie.link.width.max":               "pcie.link.width.max",
+  > 45: 		"index":                             "index",
+  > 46: 		"display_mode":                      "display_mode",
+  > 47: 		"display_active":                    "display_active",
+  > 48: 		"persistence_mode":                  "persistence_mode",
+  > 49: 		"accounting.mode":                   "accounting.mode",
+  > 50: 		"accounting.buffer_size":            "accounting.buffer_size",
+  > 51: 		"driver_model.current":              "driver_model.current",
+  > 52: 		"driver_model.pending":              "driver_model.pending",
+  > 53: 		"vbios_version":                     "vbios_version",
+  > 54: 		"inforom.img":                       "inforom.img",
+  > 55: 		"inforom.oem":                       "inforom.oem",
+  > 56: 		"inforom.ecc":                       "inforom.ecc",
+  > 57: 		"inforom.pwr":                       "inforom.pwr",
+  > 58: 		"gom.current":                       "gom.current",
+  > 59: 		"gom.pending":                       "gom.pending",
+  > 60: 		"fan.speed":                         "fan.speed [%]",
+  > 61: 		"pstate":                            "pstate",
+  > 62: 		"clocks_throttle_reasons.supported": "clocks_throttle_reasons.supported",
+  > 63: 		"clocks_throttle_reasons.active":    "clocks_throttle_reasons.active",
+  > 64: 		"clocks_throttle_reasons.gpu_idle":  "clocks_throttle_reasons.gpu_idle",
+  > 65: 		"clocks_throttle_reasons.applications_clocks_setting": "clocks_throttle_reasons.applications_clocks_setting",
+  > 66: 		"clocks_throttle_reasons.sw_power_cap":                "clocks_throttle_reasons.sw_power_cap",
+  > 67: 		"clocks_throttle_reasons.hw_slowdown":                 "clocks_throttle_reasons.hw_slowdown",
+  > 68: 		"clocks_throttle_reasons.hw_thermal_slowdown":         "clocks_throttle_reasons.hw_thermal_slowdown",
+  > 69: 		"clocks_throttle_reasons.hw_power_brake_slowdown":     "clocks_throttle_reasons.hw_power_brake_slowdown",
+  > 70: 		"clocks_throttle_reasons.sw_thermal_slowdown":         "clocks_throttle_reasons.sw_thermal_slowdown",
+  > 71: 		"clocks_throttle_reasons.sync_boost":                  "clocks_throttle_reasons.sync_boost",
+  > 72: 		"memory.total":                                        "memory.total [MiB]",
+  > 73: 		"memory.used":                                         "memory.used [MiB]",
+  > 74: 		"memory.free":                                         "memory.free [MiB]",
+  > 75: 		"compute_mode":                                        "compute_mode",
+  > 76: 		"utilization.gpu":                                     "utilization.gpu [%]",
+  > 77: 		"utilization.memory":                                  "utilization.memory [%]",
+  > 78: 		"encoder.stats.sessionCount":                          "encoder.stats.sessionCount",
+  > 79: 		"encoder.stats.averageFps":                            "encoder.stats.averageFps",
+  > 80: 		"encoder.stats.averageLatency":                        "encoder.stats.averageLatency",
+  > 81: 		"ecc.mode.current":                                    "ecc.mode.current",
+  > 82: 		"ecc.mode.pending":                                    "ecc.mode.pending",
+  > 83: 		"ecc.errors.corrected.volatile.device_memory":         "ecc.errors.corrected.volatile.device_memory",
+  > 84: 		"ecc.errors.corrected.volatile.dram":                  "ecc.errors.corrected.volatile.dram",
+  > 85: 		"ecc.errors.corrected.volatile.register_file":         "ecc.errors.corrected.volatile.register_file",
+  > 86: 		"ecc.errors.corrected.volatile.l1_cache":              "ecc.errors.corrected.volatile.l1_cache",
+  > 87: 		"ecc.errors.corrected.volatile.l2_cache":              "ecc.errors.corrected.volatile.l2_cache",
+  > 88: 		"ecc.errors.corrected.volatile.texture_memory":        "ecc.errors.corrected.volatile.texture_memory",
+  > 89: 		"ecc.errors.corrected.volatile.cbu":                   "ecc.errors.corrected.volatile.cbu",
+  > 90: 		"ecc.errors.corrected.volatile.sram":                  "ecc.errors.corrected.volatile.sram",
+  > 91: 		"ecc.errors.corrected.volatile.total":                 "ecc.errors.corrected.volatile.total",
+  > 92: 		"ecc.errors.corrected.aggregate.device_memory":        "ecc.errors.corrected.aggregate.device_memory",
+  > 93: 		"ecc.errors.corrected.aggregate.dram":                 "ecc.errors.corrected.aggregate.dram",
+  > 94: 		"ecc.errors.corrected.aggregate.register_file":        "ecc.errors.corrected.aggregate.register_file",
+  > 95: 		"ecc.errors.corrected.aggregate.l1_cache":             "ecc.errors.corrected.aggregate.l1_cache",
+  > 96: 		"ecc.errors.corrected.aggregate.l2_cache":             "ecc.errors.corrected.aggregate.l2_cache",
+  > 97: 		"ecc.errors.corrected.aggregate.texture_memory":       "ecc.errors.corrected.aggregate.texture_memory",
+  > 98: 		"ecc.errors.corrected.aggregate.cbu":                  "ecc.errors.corrected.aggregate.cbu",
+  > 99: 		"ecc.errors.corrected.aggregate.sram":                 "ecc.errors.corrected.aggregate.sram",
+  > 100: 		"ecc.errors.corrected.aggregate.total":                "ecc.errors.corrected.aggregate.total",
+  > 101: 		"ecc.errors.uncorrected.volatile.device_memory":       "ecc.errors.uncorrected.volatile.device_memory",
+  > 102: 		"ecc.errors.uncorrected.volatile.dram":                "ecc.errors.uncorrected.volatile.dram",
+  > 103: 		"ecc.errors.uncorrected.volatile.register_file":       "ecc.errors.uncorrected.volatile.register_file",
+  > 104: 		"ecc.errors.uncorrected.volatile.l1_cache":            "ecc.errors.uncorrected.volatile.l1_cache",
+  > 105: 		"ecc.errors.uncorrected.volatile.l2_cache":            "ecc.errors.uncorrected.volatile.l2_cache",
+  > 106: 		"ecc.errors.uncorrected.volatile.texture_memory":      "ecc.errors.uncorrected.volatile.texture_memory",
+  > 107: 		"ecc.errors.uncorrected.volatile.cbu":                 "ecc.errors.uncorrected.volatile.cbu",
+  > 108: 		"ecc.errors.uncorrected.volatile.sram":                "ecc.errors.uncorrected.volatile.sram",
+  > 109: 		"ecc.errors.uncorrected.volatile.total":               "ecc.errors.uncorrected.volatile.total",
+  > 110: 		"ecc.errors.uncorrected.aggregate.device_memory":      "ecc.errors.uncorrected.aggregate.device_memory",
+  > 111: 		"ecc.errors.uncorrected.aggregate.dram":               "ecc.errors.uncorrected.aggregate.dram",
+  > 112: 		"ecc.errors.uncorrected.aggregate.register_file":      "ecc.errors.uncorrected.aggregate.register_file",
+  > 113: 		"ecc.errors.uncorrected.aggregate.l1_cache":           "ecc.errors.uncorrected.aggregate.l1_cache",
+  > 114: 		"ecc.errors.uncorrected.aggregate.l2_cache":           "ecc.errors.uncorrected.aggregate.l2_cache",
+  > 115: 		"ecc.errors.uncorrected.aggregate.texture_memory":     "ecc.errors.uncorrected.aggregate.texture_memory",
+  > 116: 		"ecc.errors.uncorrected.aggregate.cbu":                "ecc.errors.uncorrected.aggregate.cbu",
+  > 117: 		"ecc.errors.uncorrected.aggregate.sram":               "ecc.errors.uncorrected.aggregate.sram",
+  > 118: 		"ecc.errors.uncorrected.aggregate.total":              "ecc.errors.uncorrected.aggregate.total",
+  > 119: 		"retired_pages.single_bit_ecc.count":                  "retired_pages.single_bit_ecc.count",
+  > 120: 		"retired_pages.double_bit.count":                      "retired_pages.double_bit.count",
+  > 121: 		"retired_pages.pending":                               "retired_pages.pending",
+  > 122: 		"temperature.gpu":                                     "temperature.gpu",
+  > 123: 		"temperature.memory":                                  "temperature.memory",
+  > 124: 		"power.management":                                    "power.management",
+  > 125: 		"power.draw":                                          "power.draw [W]",
+  > 126: 		"power.limit":                                         "power.limit [W]",
+  > 127: 		"enforced.power.limit":                                "enforced.power.limit [W]",
+  > 128: 		"power.default_limit":                                 "power.default_limit [W]",
+  > 129: 		"power.min_limit":                                     "power.min_limit [W]",
+  > 130: 		"power.max_limit":                                     "power.max_limit [W]",
+  > 131: 		"clocks.current.graphics":                             "clocks.current.graphics [MHz]",
+  > 132: 		"clocks.current.sm":                                   "clocks.current.sm [MHz]",
+  > 133: 		"clocks.current.memory":                               "clocks.current.memory [MHz]",
+  > 134: 		"clocks.current.video":                                "clocks.current.video [MHz]",
+  > 135: 		"clocks.applications.graphics":                        "clocks.applications.graphics [MHz]",
+  > 136: 		"clocks.applications.memory":                          "clocks.applications.memory [MHz]",
+  > 137: 		"clocks.default_applications.graphics":                "clocks.default_applications.graphics [MHz]",
+  > 138: 		"clocks.default_applications.memory":                  "clocks.default_applications.memory [MHz]",
+  > 139: 		"clocks.max.graphics":                                 "clocks.max.graphics [MHz]",
+  > 140: 		"clocks.max.sm":                                       "clocks.max.sm [MHz]",
+  > 141: 		"clocks.max.memory":                                   "clocks.max.memory [MHz]",
+  > 142: 		"mig.mode.current":                                    "mig.mode.current",
+  > 143: 		"mig.mode.pending":                                    "mig.mode.pending",
+  > 144: 	}
+    145: )
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/component/remote/vault/auth.go:339-342[0m] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+    338: // DefaultAuthKubernetes provides default settings for AuthKubernetes.
+  > 339: var DefaultAuthKubernetes = AuthKubernetes{
+  > 340: 	MountPath:               "kubernetes",
+  > 341: 	ServiceAccountTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+  > 342: }
+    343: 
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/component/pyroscope/write/promhttp2/http_config.go:114[0m] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+    113: const (
+  > 114: 	grantTypeJWTBearer = "urn:ietf:params:oauth:grant-type:jwt-bearer"
+    115: )
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/tools/docs_generator/docs_generator.go:69[0m] - G703 (CWE-22): Path traversal via taint analysis (Confidence: HIGH, Severity: HIGH)
+    68: 	}
+  > 69: 	err = os.WriteFile(filePath, newFileContents, 0644)
+    70: 	return err
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/docs/doc.go:51[0m] - G703 (CWE-22): Path traversal via taint analysis (Confidence: HIGH, Severity: HIGH)
+    50: func checkServicesDocSection(path string, expectedDoc string) error {
+  > 51: 	contents, err := os.ReadFile(path)
+    52: 	if err != nil {
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/integration-tests/k8s/harness/env.go:40[0m] - G703 (CWE-22): Path traversal via taint analysis (Confidence: HIGH, Severity: HIGH)
+    39: 	}
+  > 40: 	if _, err := os.Stat(kubeconfig); err != nil {
+    41: 		return "", fmt.Errorf("%s %q is not accessible: %w", KubeconfigEnv, kubeconfig, err)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/component/pyroscope/ebpf/reporter/parca/reporter/pyroscope_uploader.go:97[0m] - G122 (CWE-367): Filesystem operation in filepath.Walk/WalkDir callback uses race-prone path; consider root-scoped APIs (e.g. os.Root) to prevent symlink TOCTOU traversal (Confidence: MEDIUM, Severity: HIGH)
+    96: 
+  > 97: 		if os.Remove(path) != nil {
+    98: 			level.Warn(logger).Log("msg", "failed to remove cached file", "path", path)
+
+Autofix: 
+
+[[97;41m/home/reprah007/src/alloy/internal/alloycli/cmd_run.go:586[0m] - G122 (CWE-367): Filesystem operation in filepath.Walk/WalkDir callback uses race-prone path; consider root-scoped APIs (e.g. os.Root) to prevent symlink TOCTOU traversal (Confidence: MEDIUM, Severity: HIGH)
+    585: 
+  > 586: 			bb, err := os.ReadFile(curPath)
+    587: 			sources[curPath] = bb
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/runner/runner.go:86[0m] - G118 (CWE-400): context cancellation function returned by WithCancel/WithTimeout/WithDeadline is not called (Confidence: HIGH, Severity: MEDIUM)
+    85: func New[TaskType Task](newWorker func(t TaskType) Worker) *Runner[TaskType] {
+  > 86: 	ctx, cancel := context.WithCancel(context.Background())
+    87: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/source/scheduler.go:40[0m] - G118 (CWE-400): context cancellation function returned by WithCancel/WithTimeout/WithDeadline is not called (Confidence: HIGH, Severity: MEDIUM)
+    39: 
+  > 40: 	ctx, cancel := context.WithCancel(s.ctx)
+    41: 	st := scheduledSource[Key]{
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/source/scheduler.go:23[0m] - G118 (CWE-400): context cancellation function returned by WithCancel/WithTimeout/WithDeadline is not called (Confidence: HIGH, Severity: MEDIUM)
+    22: func NewScheduler[Key comparable]() *Scheduler[Key] {
+  > 23: 	ctx, cancel := context.WithCancel(context.Background())
+    24: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/discovery/consulagent/promtail_consulagent.go:381[0m] - G118 (CWE-400): context cancellation function returned by WithCancel/WithTimeout/WithDeadline is not called (Confidence: HIGH, Severity: MEDIUM)
+    380: 
+  > 381: 		wctx, cancel := context.WithCancel(ctx)
+    382: 		d.watchService(wctx, ch, name)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/service/http/http.go:445[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    444: 			w.WriteHeader(http.StatusBadRequest)
+  > 445: 			_, _ = fmt.Fprintf(w, "failed to parse URL path %q: %s\n", r.URL.Path, err)
+    446: 			return
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/prometheus/operator/common/component.go:206[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    205: 		}
+  > 206: 		_, err = w.Write(dat)
+    207: 		if err != nil {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/prometheus/operator/common/component.go:200[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    199: 		if err != nil {
+  > 200: 			if _, err = w.Write([]byte(err.Error())); err != nil {
+    201: 				return
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/metrics/instance/instance.go:199[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    198: 	}
+  > 199: 	hash := md5.Sum(bytes)
+    200: 	return hex.EncodeToString(hash[:]), nil
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/gcp_exporter/gcp_exporter.go:75[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    74: 	}
+  > 75: 	hash := md5.Sum(bytes)
+    76: 	return hex.EncodeToString(hash[:]), nil
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/config.go:177[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    176: 	}
+  > 177: 	hash := md5.Sum(bytes)
+    178: 	return hex.EncodeToString(hash[:]), nil
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/azure_exporter/config.go:323[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    322: 	}
+  > 323: 	hash := md5.Sum(bytes)
+    324: 	return hex.EncodeToString(hash[:]), nil
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/asprof/asprof.go:46[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    45: func (a *Archive) sha1() string {
+  > 46: 	sum := sha1.Sum(a.data)
+    47: 	return hex.EncodeToString(sum[:])
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/prometheus/exporter/cloudwatch/config.go:391[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    390: 	}
+  > 391: 	hash := md5.Sum(bytes)
+    392: 	return hex.EncodeToString(hash[:])
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/secretfilter/secretfilter.go:405[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    404: func hashSecret(secret string) string {
+  > 405: 	sum := sha1.Sum([]byte(secret))
+    406: 	return hex.EncodeToString(sum[:])
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/common/relabel/relabel.go:286[0m] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    285: 	case HashMod:
+  > 286: 		hash := md5.Sum([]byte(val))
+    287: 		// Use only the last 8 bytes of the hash to give the same result as earlier versions of this code.
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/asprof/asprof.go:64[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    63: 	exe := d.LauncherPath()
+  > 64: 	cmd := exec.Command(exe, argv...)
+    65: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/harness/cmd.go:47[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    46: func runDiagnosticCommand(ctx context.Context, name string, args ...string) error {
+  > 47: 	cmd := exec.CommandContext(ctx, name, args...)
+    48: 	cmd.Env = CommandEnv()
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/harness/cmd.go:36[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    35: func RunCommandStdin(stdin, name string, args ...string) error {
+  > 36: 	cmd := exec.Command(name, args...)
+    37: 	cmd.Stdin = strings.NewReader(stdin)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/harness/cmd.go:26[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    25: func RunCommandQuiet(name string, args ...string) error {
+  > 26: 	cmd := exec.Command(name, args...)
+    27: 	cmd.Stdout = io.Discard
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/harness/cmd.go:16[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    15: func RunCommand(name string, args ...string) error {
+  > 16: 	cmd := exec.Command(name, args...)
+    17: 	cmd.Stdout = os.Stdout
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/deps/shared.go:48-55[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    47: func startPortForward(namespace, name, localPort, port string) (func(), error) {
+  > 48: 	cmd := exec.CommandContext(
+  > 49: 		context.Background(),
+  > 50: 		"kubectl",
+  > 51: 		"port-forward",
+  > 52: 		"--namespace", namespace,
+  > 53: 		"service/"+name,
+  > 54: 		localPort+":"+port,
+  > 55: 	)
+    56: 	cmd.Stdout = os.Stdout
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:515[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    514: 	// Collect logs from the alloy container
+  > 515: 	logsCmd := exec.Command("docker", "compose", "-f", composeFile, "-p", projectName, "logs", "alloy")
+    516: 	logsCmd.Dir = absTestDir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:488[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    487: 	fmt.Printf("Starting compose services for %s...\n", dirName)
+  > 488: 	upCmd := exec.Command("docker", "compose", "-f", composeFile, "-p", projectName, "up", "-d", "--build", "--wait")
+    489: 	upCmd.Dir = absTestDir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:479[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    478: 		fmt.Printf("Stopping compose services for %s...\n", dirName)
+  > 479: 		downCmd := exec.Command("docker", "compose", "-f", composeFile, "-p", projectName, "down")
+    480: 		downCmd.Dir = absTestDir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:50[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    49: 
+  > 50: 	cmd := exec.Command(command, args...)
+    51: 	cmd.Dir = dir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/additional_containers.go:140[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    139: 
+  > 140: 	cmd := exec.Command("docker", args...)
+    141: 	cmd.Dir = absTestDir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/docs/developer/key-deps-update/tools/dependency-updates/latest-release/main.go:183[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    182: func getGitHubReleases(repo string, limit int) ([]Release, error) {
+  > 183: 	cmd := exec.Command("gh", "release", "list", "-R", repo, "-L", strconv.Itoa(limit))
+    184: 	output, err := cmd.Output()
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/docs/developer/key-deps-update/tools/dependency-updates/latest-release/main.go:86[0m] - G204 (CWE-78): Subprocess launched with variable (Confidence: HIGH, Severity: MEDIUM)
+    85: func getGoModuleVersions(modulePath string) ([]VersionInfo, error) {
+  > 86: 	cmd := exec.Command("go", "list", "-m", "-json", "-versions", modulePath)
+    87: 	output, err := cmd.Output()
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/nvidiagpu_exporter/internal/exporter/fields.go:154[0m] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    153: 	cmdAndArgs = append(cmdAndArgs, "--help-query-gpu")
+  > 154: 	cmd := exec.CommandContext(ctx, cmdAndArgs[0], cmdAndArgs[1:]...) //nolint:gosec
+    155: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/nvidiagpu_exporter/internal/exporter/exporter.go:314[0m] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    313: 
+  > 314: 	cmd := exec.CommandContext(ctx, cmdAndArgs[0], cmdAndArgs[1:]...) //nolint:gosec
+    315: 	cmd.Stdout = &stdout
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/cmd/alloy-service/service.go:86[0m] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    85: func (svc *serviceManager) buildCommand(ctx context.Context) *exec.Cmd {
+  > 86: 	cmd := exec.CommandContext(ctx, svc.cfg.Path, svc.cfg.Args...)
+    87: 	cmd.Dir = svc.cfg.Dir
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/docs/developer/key-deps-update/tools/dependency-updates/latest-release/main.go:223-226[0m] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    222: 
+  > 223: 	cmd := exec.Command("gh", "api", "repos/"+repo+"/tags",
+  > 224: 		"--jq", `.[] | "\(.name)\t\(if .commit.commit.author.date then .commit.commit.author.date else "N/A" end)"`,
+  > 225: 		"-X", "GET",
+  > 226: 		"-F", fmt.Sprintf("per_page=%d", perPage))
+    227: 	output, err := cmd.Output()
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/docs/developer/key-deps-update/tools/dependency-updates/latest-release/main.go:110[0m] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    109: 	for _, version := range versions {
+  > 110: 		cmd := exec.Command("go", "list", "-m", "-json", modulePath+"@"+version)
+    111: 		output, err := cmd.Output()
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/postgres/collector/schema_details.go:423[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    422: func (c *SchemaDetails) getAllDatabases(ctx context.Context) ([]string, error) {
+  > 423: 	query := fmt.Sprintf(selectAllDatabases, buildExcludedDatabasesClause(c.excludeDatabases))
+    424: 	rows, err := c.initialConnection.QueryContext(ctx, query)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/postgres/collector/query_samples.go:306[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    305: 	excludedUsersClause := buildExcludedUsersClause(c.excludeUsers, "s.usename")
+  > 306: 	query := fmt.Sprintf(selectPgStatActivity, queryTextField, excludedDatabasesClause, excludeCurrentUserClauseField, excludedUsersClause)
+    307: 	rows, err := c.dbConnection.QueryContext(ctx, query)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/postgres/collector/query_details.go:141[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    140: 	excludedUsersClause := buildExcludedUsersClause(c.excludeUsers, "pg_get_userbyid(pg_stat_statements.userid)")
+  > 141: 	query := fmt.Sprintf(selectQueriesFromActivity, excludedDatabasesClause, excludedUsersClause, c.statementsLimit)
+    142: 	rs, err := c.dbConnection.QueryContext(ctx, query)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/mysql/collector/schema_details.go:231[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    230: func (c *SchemaDetails) extractSchema(ctx context.Context) error {
+  > 231: 	query := fmt.Sprintf(selectTablesTemplate, buildExcludedSchemasClause(c.excludeSchemas))
+    232: 	rs, err := c.dbConnection.QueryContext(ctx, query)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/mysql/collector/query_details.go:128[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    127: func (c *QueryDetails) tablesFromEventsStatements(ctx context.Context) error {
+  > 128: 	query := fmt.Sprintf(selectQueryTablesSamples, buildExcludedSchemasClause(c.excludeSchemas), c.statementsLimit)
+    129: 	rs, err := c.dbConnection.QueryContext(ctx, query)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/database_observability/mysql/collector/explain_plans.go:525[0m] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    524: func (c *ExplainPlans) populateQueryCache(ctx context.Context) error {
+  > 525: 	query := fmt.Sprintf(selectDigestsForExplainPlan, buildExcludedSchemasClause(c.excludeSchemas))
+    526: 	rs, err := c.dbConnection.QueryContext(ctx, query, c.lastSeen)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:51[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    50: 		case tar.TypeReg:
+  > 51: 			f, err := os.OpenFile(fullPath, os.O_CREATE|os.O_WRONLY, os.FileMode(header.Mode))
+    52: 			if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:15[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    14: func Untar(tarPath string, destPath string) error {
+  > 15: 	f, err := os.Open(tarPath)
+    16: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/tools/docs_generator/docs_generator.go:74[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    73: func readBetweenMarkers(startMarker string, endMarker string, filePath string) (string, error) {
+  > 74: 	fileContents, err := os.ReadFile(filePath)
+    75: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/tools/docs_generator/docs_generator.go:47[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    46: func writeBetweenMarkers(startMarker string, endMarker string, filePath string, content string, appendIfMissing bool) error {
+  > 47: 	fileContents, err := os.ReadFile(filePath)
+    48: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/redis_exporter/redis_exporter.go:148[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    147: 		for _, path := range strings.Split(c.ScriptPath, ",") {
+  > 148: 			ls, err := os.ReadFile(path)
+    149: 			if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/elasticsearch_exporter/tls.go:39[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    38: func loadCertificatesFrom(pemFile string) (*x509.CertPool, error) {
+  > 39: 	caCert, err := os.ReadFile(pemFile)
+    40: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/docs/doc.go:51[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    50: func checkServicesDocSection(path string, expectedDoc string) error {
+  > 51: 	contents, err := os.ReadFile(path)
+    52: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/service/remotecfg/config_manager.go:136[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    135: 	p := cm.getCachedConfigPath()
+  > 136: 	return os.ReadFile(p)
+    137: }
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/service/cluster/cluster.go:213[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    212: func loadTLSConfigFromFile(TLSCAPath string, TLSCertPath string, TLSKeyPath string, serverName string) (*tls.Config, error) {
+  > 213: 	pem, err := os.ReadFile(TLSCAPath)
+    214: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/nodeconf/importsource/import_file.go:174[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    173: 		}
+  > 174: 		bb, err := os.ReadFile(fpath)
+    175: 		if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/filedetector/internal/inotifyinfo/inotifyinfo_linux.go:94[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    93: 	filename = "/proc/sys/fs/inotify/" + filename
+  > 94: 	dat, err := os.ReadFile(filename)
+    95: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:159[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    158: 	if _, err := os.Stat(filePath); err == nil {
+  > 159: 		outputBytes, err := os.ReadFile(filePath)
+    160: 		require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:137[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    136: 		var err error
+  > 137: 		expectedDiags, err = os.ReadFile(diagsFile)
+    138: 		require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:127[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    126: func getSourceContents(t *testing.T, path string) []byte {
+  > 127: 	sourceBytes, err := os.ReadFile(path)
+    128: 	require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:97[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    96: 					if len(actualAlloy) > 0 && !hasCritical {
+  > 97: 						f, err := os.OpenFile(alloyFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+    98: 						require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:86[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    85: 					if len(actualDiags) > 0 {
+  > 86: 						f, err := os.OpenFile(diagsFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+    87: 						require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/loop.go:155[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    154: 	}
+  > 155: 	jfrBytes, err := os.ReadFile(jfrFile)
+    156: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/asprof/asprof_linux.go:31[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    30: 	procRoot := ProcessPath("/", pid)
+  > 31: 	procRootFile, err := os.Open(procRoot)
+    32: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/asprof/asprof.go:104[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    103: 	fileMap[filepath.Join(distName, d.LibPath())] = lib
+  > 104: 	tmpDirFile, err := os.Open(tmpDir)
+    105: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/ebpf/symb/irsymcache/table.go:27[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    26: func (t TableTableFactory) OpenTable(path string) (Table, error) {
+  > 27: 	f, err := os.Open(path)
+    28: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/ebpf/symb/irsymcache/cache.go:265[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    264: 
+  > 265: 	dst, err = os.Create(tableFilePath)
+    266: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/ebpf/ebpf_linux.go:336[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    335: 		file := extractAsFile(args.Process.PID(), args.DebuglinkFileName)
+  > 336: 		if f, err := os.Open(file); err != nil {
+    337: 			return fallback()
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/prometheus/exporter/statsd/config.go:101[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    100: func readMappingFile(path string) (any, error) {
+  > 101: 	file, err := os.ReadFile(path)
+    102: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/secretfilter/secretfilter.go:207[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    206: func loadGitleaksConfig(path string) (config.Config, error) {
+  > 207: 	data, err := os.ReadFile(path)
+    208: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/faro/receiver/sourcemaps.go:70[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    69: 	}
+  > 70: 	return os.ReadFile(name)
+    71: }
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/discovery/process/discover.go:183[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    182: func getLinuxProcessCgroupPath(pid string) (string, error) {
+  > 183: 	cgroup, err := os.Open(path.Join("/proc", pid, "cgroup"))
+    184: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/component/discovery/process/discover.go:169[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    168: func getLinuxProcessContainerID(pid string) (string, error) {
+  > 169: 	cgroup, err := os.Open(path.Join("/proc", pid, "cgroup"))
+    170: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloyseed/alloyseed.go:114[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    113: func readSeedFile(path string, logger log.Logger) (*Seed, error) {
+  > 114: 	data, err := os.ReadFile(path)
+    115: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloycli/cmd_run.go:597[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    596: 
+  > 597: 	bb, err := os.ReadFile(path)
+    598: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloycli/cmd_run.go:586[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    585: 
+  > 586: 			bb, err := os.ReadFile(curPath)
+    587: 			sources[curPath] = bb
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloycli/cmd_fmt.go:131[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    130: 
+  > 131: 	wf, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, fi.Mode().Perm())
+    132: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloycli/cmd_fmt.go:90[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    89: 
+  > 90: 		f, err := os.Open(configFile)
+    91: 		if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/alloycli/cmd_convert.go:109[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    108: 
+  > 109: 	f, err := os.Open(configFile)
+    110: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/deps/mimir.go:180[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    179: 	t.Helper()
+  > 180: 	expectedMimirConfigBytes, err := os.ReadFile(expectedFile)
+    181: 	require.NoError(t, err)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/k8s/deps/log_gen.go:84[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    83: 	}
+  > 84: 	raw, err := os.ReadFile(absPath)
+    85: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:100[0m] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    99: 	path := filepath.Join(absTestDir, "test.yaml")
+  > 100: 	data, err := os.ReadFile(path)
+    101: 	if err != nil {
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[[30;43m/home/reprah007/src/alloy/internal/service/http/http.go:293[0m] - G112 (CWE-400): Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server (Confidence: LOW, Severity: MEDIUM)
+    292: 
+  > 293: 	srv := &http.Server{Handler: h2c.NewHandler(r, &http2.Server{})}
+    294: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/faro/receiver/server.go:99-102[0m] - G112 (CWE-400): Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server (Confidence: LOW, Severity: MEDIUM)
+    98: 
+  > 99: 	srv := &http.Server{
+  > 100: 		Addr:    fmt.Sprintf("%s:%d", s.args.Host, s.args.Port),
+  > 101: 		Handler: mw.Wrap(riHandler),
+  > 102: 	}
+    103: 
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/cmd/alloy-service/testdata/example_service.go:54[0m] - G112 (CWE-400): Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server (Confidence: LOW, Severity: MEDIUM)
+    53: 
+  > 54: 	srv := &http.Server{Handler: mux}
+    55: 	_ = srv.Serve(lis)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/configs/prom-gen/main.go:36[0m] - G112 (CWE-400): Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server (Confidence: LOW, Severity: MEDIUM)
+    35: 	http.Handle("/metrics", http.HandlerFunc(handleWithPrefixSupport))
+  > 36: 	server := &http.Server{Addr: listenAddress, Handler: nil}
+    37: 	defer func() {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/runtime/tracing/internal/jaegerremote/utils/http_json.go:29[0m] - G107 (CWE-88): Potential HTTP request made with variable url (Confidence: MEDIUM, Severity: MEDIUM)
+    28: func GetJSON(url string, out any) error {
+  > 29: 	resp, err := http.Get(url)
+    30: 	if err != nil {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:55[0m] - G110 (CWE-409): Potential DoS vulnerability via decompression bomb (Confidence: MEDIUM, Severity: MEDIUM)
+    54: 			}
+  > 55: 			if _, err := io.Copy(f, tr); err != nil {
+    56: 				return err
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/source/aws_firehose/model.go:83[0m] - G110 (CWE-409): Potential DoS vulnerability via decompression bomb (Confidence: MEDIUM, Severity: MEDIUM)
+    82: 	var b bytes.Buffer
+  > 83: 	if _, err := io.Copy(&b, reader); err != nil {
+    84: 		return nil, originCloudwatchLogs, fmt.Errorf("%w: %w", errGZIPDeflate, err)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:43[0m] - G305 (CWE-22): File traversal when extracting zip/tar archive (Confidence: HIGH, Severity: MEDIUM)
+    42: 
+  > 43: 		fullPath := filepath.Join(destPath, header.Name)
+    44: 		switch header.Typeflag {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:97[0m] - G302 (CWE-276): Expect file permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    96: 					if len(actualAlloy) > 0 && !hasCritical {
+  > 97: 						f, err := os.OpenFile(alloyFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+    98: 						require.NoError(t, err)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/converter/internal/test_common/testing.go:86[0m] - G302 (CWE-276): Expect file permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    85: 					if len(actualDiags) > 0 {
+  > 86: 						f, err := os.OpenFile(diagsFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+    87: 						require.NoError(t, err)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:46[0m] - G301 (CWE-276): Expect directory permissions to be 0750 or less (Confidence: HIGH, Severity: MEDIUM)
+    45: 		case tar.TypeDir:
+  > 46: 			if err := os.MkdirAll(fullPath, 0755); err != nil {
+    47: 				return err
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/util/untar.go:22[0m] - G301 (CWE-276): Expect directory permissions to be 0750 or less (Confidence: HIGH, Severity: MEDIUM)
+    21: 	// Create destination path.
+  > 22: 	if err := os.MkdirAll(destPath, 0755); err != nil {
+    23: 		return err
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/ebpf/reporter/parca/reporter/pyroscope_uploader.go:78[0m] - G301 (CWE-276): Expect directory permissions to be 0750 or less (Confidence: HIGH, Severity: MEDIUM)
+    77: 		level.Debug(logger).Log("msg", "creating cache directory", "path", cacheDirectory)
+  > 78: 		if err := os.MkdirAll(cacheDirectory, os.ModePerm); err != nil {
+    79: 			return nil, fmt.Errorf("failed to create cache directory (%s): %s", cacheDirectory, err)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/integration-tests/docker/utils.go:307[0m] - G301 (CWE-276): Expect directory permissions to be 0750 or less (Confidence: HIGH, Severity: MEDIUM)
+    306: 		if _, err := os.Stat(mountDir); os.IsNotExist(err) {
+  > 307: 			if err := os.MkdirAll(mountDir, 0o755); err != nil {
+    308: 				panic(fmt.Sprintf("failed to create mount directory: %v\n", err))
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/tools/docs_generator/docs_generator.go:69[0m] - G306 (CWE-276): Expect WriteFile permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    68: 	}
+  > 69: 	err = os.WriteFile(filePath, newFileContents, 0644)
+    70: 	return err
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/service/remotecfg/config_manager.go:141[0m] - G306 (CWE-276): Expect WriteFile permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    140: 	p := cm.getCachedConfigPath()
+  > 141: 	err := os.WriteFile(p, b, 0750)
+    142: 	if err != nil {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/local/file_match/testutil/testutil.go:18[0m] - G306 (CWE-276): Expect WriteFile permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    17: 	t.Helper()
+  > 18: 	err := os.WriteFile(path.Join(dir, name), []byte("test content"), 0664)
+    19: 	require.NoError(t, err)
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/alloyseed/alloyseed.go:153[0m] - G306 (CWE-276): Expect WriteFile permissions to be 0600 or less (Confidence: HIGH, Severity: MEDIUM)
+    152: 	}
+  > 153: 	err = os.WriteFile(path, data, 0644)
+    154: 	if err != nil {
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/pyroscope/java/asprof/asprof.go:7[0m] - G505 (CWE-327): Blocklisted import crypto/sha1: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    6: 	"bytes"
+  > 7: 	"crypto/sha1"
+    8: 	_ "embed"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/loki/secretfilter/secretfilter.go:6[0m] - G505 (CWE-327): Blocklisted import crypto/sha1: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    5: 	"context"
+  > 6: 	"crypto/sha1"
+    7: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/metrics/instance/instance.go:5[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    4: import (
+  > 5: 	"crypto/md5"
+    6: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/gcp_exporter/gcp_exporter.go:5[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    4: 	"context"
+  > 5: 	"crypto/md5"
+    6: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/config.go:4[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    3: import (
+  > 4: 	"crypto/md5"
+    5: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/static/integrations/azure_exporter/config.go:4[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    3: import (
+  > 4: 	"crypto/md5"
+    5: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/prometheus/exporter/cloudwatch/config.go:4[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    3: import (
+  > 4: 	"crypto/md5"
+    5: 	"encoding/hex"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/component/common/relabel/relabel.go:20[0m] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    19: import (
+  > 20: 	"crypto/md5"
+    21: 	"encoding/binary"
+
+Autofix: 
+
+[[30;43m/home/reprah007/src/alloy/internal/cmd/alloy-service/testdata/example_service.go:31[0m] - G102 (CWE-200): Binds to all network interfaces (Confidence: HIGH, Severity: MEDIUM)
+    30: 
+  > 31: 	lis, err := net.Listen("tcp", listenAddr)
+    32: 	if err != nil {
+
+Autofix: 
+
+[[37;40m/home/reprah007/src/alloy/internal/component/loki/source/file/internal/tail/reader.go:132[0m] - G103 (CWE-242): Use of unsafe calls should be audited (Confidence: HIGH, Severity: LOW)
+    131: 	// the bytes given to it, even Nop decoder will do that.
+  > 132: 	return unsafe.String(unsafe.SliceData(converted), len(converted)), nil
+    133: }
+
+Autofix: 
+
+[[37;40m/home/reprah007/src/alloy/internal/component/loki/source/file/internal/tail/reader.go:132[0m] - G103 (CWE-242): Use of unsafe calls should be audited (Confidence: HIGH, Severity: LOW)
+    131: 	// the bytes given to it, even Nop decoder will do that.
+  > 132: 	return unsafe.String(unsafe.SliceData(converted), len(converted)), nil
+    133: }
+
+Autofix: 
+
+[[37;40m/home/reprah007/src/alloy/internal/component/loki/source/docker/tailer.go:269[0m] - G103 (CWE-242): Use of unsafe calls should be audited (Confidence: HIGH, Severity: LOW)
+    268: 	// the underlying bytes aren't modified during parsing.
+  > 269: 	ts, err := time.Parse(time.RFC3339Nano, unsafe.String(&line[0], spaceIdx))
+    270: 	if err != nil {
+
+Autofix: 
+
+[[37;40m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/docs/doc.go:45[0m] - G706 (CWE-117): Log injection via taint analysis (Confidence: HIGH, Severity: LOW)
+    44: 	default:
+  > 45: 		log.Printf("Unknown command: %s\n", argsWithoutProgram[0])
+    46: 		os.Exit(1)
+
+Autofix: 
+
+[[37;40m/home/reprah007/src/alloy/internal/static/integrations/cloudwatch_exporter/docs/doc.go:40[0m] - G706 (CWE-117): Log injection via taint analysis (Confidence: HIGH, Severity: LOW)
+    39: 			log.Printf("Check failed: %s\n", err)
+  > 40: 			log.Printf("Try updating %s with the services section produced by `%s generate`\n", fileToCheck, programName)
+    41: 			os.Exit(1)
+
+Autofix: 
+
+[1;36mSummary:[0m
+  Gosec  : dev
+  Files  : 1260
+  Lines  : 179062
+  Nosec  : 4
+  Issues : [1;31m124[0m
+
